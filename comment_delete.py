@@ -27,4 +27,14 @@ def comment_delete(request, pk, comment_id):
         comment.delete()
     return redirect('blog:post_detail', pk=pk)
 
+# работающий код post_delete
+@login_required(login_url='blog:index')
+def post_delete(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if post.author.username != request.user.username:
+        return redirect('blog:index')
 
+    if request.method == 'POST':
+        post.delete()
+        return redirect('blog:index')
+    return redirect('blog:index')
